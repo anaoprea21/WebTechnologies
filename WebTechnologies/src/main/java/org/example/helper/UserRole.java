@@ -1,2 +1,8 @@
-package org.example.helper;public class UserRole {
+package org.example.helper;
+
+public enum UserRole {
+
+    REPORTER,
+    SEEKER
+
 }
