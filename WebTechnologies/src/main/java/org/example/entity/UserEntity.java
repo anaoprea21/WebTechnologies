@@ -1,5 +1,3 @@
-package org.example.entity;public class UserEntity {
-}
 package org.example.entity;
 
 import jakarta.persistence.*;

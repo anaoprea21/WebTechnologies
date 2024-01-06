@@ -1,6 +1,6 @@
 # WebTechnologies
 
-News App
+News App<3
 
 This web application was made to give the students a voice. There will be two roles, that of a reporter, that can create stories and articles, and a seeker (of knowledge), that will simply read those articles. Some actions that a user will be able to do on this app are creating an article, seeing how many users have read said article and create a story, which will contain more than one descriptive article.
 
