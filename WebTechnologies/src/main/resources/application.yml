@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true  # To enable H2 console, change this to true - http://localhost:8080/h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true  # Set to true if you want to see the SQL statements in the logs
+    database-platform: org.hibernate.dialect.H2Dialect
+
