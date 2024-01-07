@@ -27,8 +27,8 @@ public class UserEntity {
     private UserRole role;
     private String pseudonym;
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "article_id")
-//    private List<ArticleEntity> articles;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "article_id")
+    private List<ArticleEntity> articles;
 
 }

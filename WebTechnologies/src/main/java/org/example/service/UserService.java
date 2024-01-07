@@ -2,9 +2,14 @@ package org.example.service;
 
 import org.example.entity.UserEntity;
 import org.example.helper.User;
+import org.example.helper.UserList;
+import org.example.mapper.UserMapper;
 import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -12,19 +17,26 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private UserMapper mapper;
+
     public User create(final User user) {
+        final UserEntity entity = mapper.toEntity(user);
+        repository.save(entity);
 
-        UserEntity customer = new UserEntity();
+        return mapper.toResponse(entity);
+    }
 
-        customer.setEmail(user.getEmail());
-        customer.setPassword(user.getPassword());
-        customer.setUsername(user.getUsername());
+    public List<User> createManyUsers(final UserList users) {
+        final List<User> userList = new ArrayList<>();
 
-        customer.setRole(user.getRole());
-        customer.setPseudonym(user.getPseudonym());
-        repository.save(customer);
+        for (User user : users.getUsers()) {
+            final UserEntity entity = mapper.toEntity(user);
+            repository.save(entity);
+            userList.add(mapper.toResponse(entity));
+        }
 
-        return user;
+        return userList;
     }
 
 }

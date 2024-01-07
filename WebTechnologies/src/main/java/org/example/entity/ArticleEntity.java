@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.helper.User;
 
 import java.util.UUID;
 @Data
@@ -21,8 +20,8 @@ public class ArticleEntity {
     private String title;
     private String text;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private UserEntity author;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity author;
 
 }
