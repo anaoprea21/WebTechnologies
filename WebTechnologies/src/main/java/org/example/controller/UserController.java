@@ -19,14 +19,13 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class UserController {
 
 
-
     @Autowired
     private UserService service;
 
     @PostMapping()
     public ResponseEntity<User> create(@RequestBody final User userDetails) {
         final var registeredUser = service.create(userDetails);
-        return ResponseEntity.status(CREATED).body(registeredUser);
+        return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("many")

@@ -30,7 +30,7 @@ public class ArticleMapper {
         articleEntity.setText(article.getText());
         articleEntity.setTitle(article.getTitle());
 
-        final Optional<UserEntity> optionalUser = repository.findUserEntityByPseudonym(article.getAuthor());
+        final Optional<UserEntity> optionalUser = repository.findCustomerByPseudonym(article.getAuthor());
 
         if (optionalUser.isPresent()) {
             final UserEntity user = optionalUser.get();
