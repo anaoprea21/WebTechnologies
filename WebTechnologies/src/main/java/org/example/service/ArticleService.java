@@ -8,6 +8,8 @@ import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ArticleService {
 
@@ -26,4 +28,18 @@ public class ArticleService {
 
         return mapper.toResponse(entity);
     }
+
+    public List<Article> getAllArticles() {
+        return mapper.moreToResponse(repository.findAll());
+    }
+
+    //check article status
+
+    //get article
+
+    //get reporter articles
+
+    //get articles that need to be reviewed
+
+    //get most popular articles after nr of views
 }

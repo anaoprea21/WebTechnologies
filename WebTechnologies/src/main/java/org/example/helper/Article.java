@@ -7,4 +7,6 @@ public class Article {
     private String title;
     private String text;
     private String author;
+    //    private String reviewer;
+    private ReviewResponses response;
 }
