@@ -28,8 +28,8 @@ public class UserController {
         return ResponseEntity.ok(registeredUser);
     }
 
-    @PostMapping("many")
-    public List<User> createManyUsers(@RequestBody final UserList usersDetails) {
-        return service.createManyUsers(usersDetails);
+    @PostMapping("/many")
+    public ResponseEntity<List<User>> createManyUsers(@RequestBody final UserList usersDetails) {
+        return ResponseEntity.ok(service.createManyUsers(usersDetails));
     }
 }

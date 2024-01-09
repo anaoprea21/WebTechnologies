@@ -22,6 +22,6 @@ public class ArticleController {
     @PostMapping()
     public ResponseEntity<Article> create(@RequestBody final Article article) {
         final var savedArticle = service.create(article);
-        return ResponseEntity.status(CREATED).body(savedArticle);
+        return ResponseEntity.ok(savedArticle);
     }
 }

@@ -20,8 +20,8 @@ public class ArticleEntity {
     private String title;
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity author;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private UserEntity author;
 
 }

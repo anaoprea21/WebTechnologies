@@ -14,8 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +44,17 @@ public class UserControllerTest {
         user.setPassword("password");
         user.setRole(UserRole.REPORTER);
         user.setPseudonym("pseudo");
+
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        users.add(new User("usernamed", "email@email.com", "password", UserRole.SEEKER, "no"));
+        users.add(new User("username1d", "edasdail@email.com", "password", UserRole.REPORTER, "pseudo"));
+        users.add(new User("username2d", "email@sds.com", "password", UserRole.REPORTER, "pseudo2"));
+        users.add(new User("username3d", "asd@email.com", "password", UserRole.SEEKER, "no"));
+        users.add(new User("username4d", "email@yahoo.com", "password", UserRole.SEEKER, "no"));
+
+        userList = new UserList();
+        userList.setUsers(users);
     }
 
     @Test
@@ -51,6 +64,17 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("username"));
+    }
+
+    @Test
+    void createManyCustomersTest() throws Exception {
+        mockMvc.perform(post("/api/user/many")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userList)))
+                .andExpect(status().isOk());
+
+//        mockMvc.perform(get("/api/user/many"))
+//                .andExpect(jsonPath("$").isArray());
     }
 
 }
