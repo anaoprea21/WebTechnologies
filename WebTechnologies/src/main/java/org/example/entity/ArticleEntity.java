@@ -22,13 +22,15 @@ public class ArticleEntity {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "story_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity author;
+
+    @ManyToOne
+    @JoinColumn(name = "story_id", nullable = true)
     private StoryEntity story;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "deliveryAddress_id", referencedColumnName = "id")
     private UserEntity reviewer;
-
 
     private ReviewResponses response;
     private boolean isSentToReview;

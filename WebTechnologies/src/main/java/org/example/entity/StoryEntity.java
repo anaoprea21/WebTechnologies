@@ -23,8 +23,7 @@ public class StoryEntity {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "article_id")
+    @OneToMany(mappedBy = "story",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleEntity> articles;
 
 }

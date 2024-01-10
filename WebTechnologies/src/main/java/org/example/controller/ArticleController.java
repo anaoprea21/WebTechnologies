@@ -9,8 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.CREATED;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/article")
@@ -29,4 +28,9 @@ public class ArticleController {
         return service.getAllArticles();
     }
 
+
+    @GetMapping("/{id}")
+    public List<Article> getArticle(@PathVariable UUID uuid) {
+        return service.getAllArticles();
+    }
 }

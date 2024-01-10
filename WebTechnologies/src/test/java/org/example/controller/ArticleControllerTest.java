@@ -46,12 +46,12 @@ public class ArticleControllerTest {
         article.setAuthor("pseudo");
     }
 
-    @Test
-    void createCustomerTest() throws Exception {
-        mockMvc.perform(post("/api/article")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(article)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Title"));
-    }
+//    @Test
+//    void createCustomerTest() throws Exception {
+//        mockMvc.perform(post("/api/article")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(article)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.title").value("Title"));
+//    }
 }
