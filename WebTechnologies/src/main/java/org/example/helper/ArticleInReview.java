@@ -1,13 +1,11 @@
 package org.example.helper;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.entity.UserEntity;
+import org.example.entity.ArticleEntity;
 
+import java.sql.SQLException;
 import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +19,4 @@ public class ArticleInReview {
     private ReviewResponses response;
     private boolean isSentToReview;
     private String reviewer;//pseudonym
-
 }

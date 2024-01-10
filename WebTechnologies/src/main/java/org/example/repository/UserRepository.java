@@ -13,9 +13,4 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
     Optional<UserEntity> findCustomerByPseudonym(final String pseudonym);
-//    @Query(value = "select * from USER_ENTITY u where upper(u.name) like upper(concat('%',:name,'%'))"
-//            , nativeQuery = true)
-//    List<UserEntity> findAllByUserName(String name);
-
-
 }

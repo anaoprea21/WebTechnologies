@@ -36,12 +36,9 @@ public class ArticleEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private UserEntity reviewer;
 
-    @Column(nullable = false)
     private ReviewResponses response;
 
-    @Column(nullable = false)
     private boolean isSentToReview;
 
-    @Column(nullable = false)
     private Integer views;
 }

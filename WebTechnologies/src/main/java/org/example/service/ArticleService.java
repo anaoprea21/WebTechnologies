@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example.entity.ArticleEntity;
+import org.example.exception.ArticleNotFound;
+import org.example.exception.UserNotFound;
 import org.example.helper.Article;
 import org.example.helper.ArticleInReview;
 import org.example.mapper.ArticleMapper;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,21 +41,25 @@ public class ArticleService {
         return mapper.moreToResponse(repository.findAll());
     }
 
-    public Article getArticle(UUID uuid) {
-        ArticleEntity optionalArticle = repository.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("NOT_FOUND"));// fa cu exception handler ca in lab10
+    public Article getArticle(String pseudo) {
+        ArticleEntity optionalArticle = repository.findByAuthor(pseudo)
+                .orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
         return mapper.toResponse(optionalArticle);
     }
 
-    public ArticleInReview checkArticleReviewStatus(UUID uuid) {
-        ArticleEntity articleEntity = repository.findById(uuid).orElseThrow(() -> new RuntimeException("NOT_FOUND"));
+    public ArticleInReview checkArticleReviewStatus(String pseudo) {
+        ArticleEntity articleEntity = repository.findByAuthor(pseudo).orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
         return mapper.toArticleInReview(articleEntity);
     }
 
-//    public ArticleInReview getArticlesThatNeedReview() {
-//        ArticleEntity articleEntity = repository.findBy(uuid).orElseThrow(() -> new RuntimeException("NOT_FOUND"));
-//        return mapper.toArticleInReview(articleEntity);
-//    }
+    public List<ArticleInReview> getArticlesThatNeedReview() {
+        List<ArticleEntity> articleEntities= repository.findArticleWithIsSentToReviewTrue(true);
+        List<ArticleInReview> articleInReviews=new ArrayList<>();
+        for(ArticleEntity art:articleEntities){
+            articleInReviews.add(mapper.toArticleInReview(art));
+        }
+        return articleInReviews;
+    }
 
     //get reporter articles
 

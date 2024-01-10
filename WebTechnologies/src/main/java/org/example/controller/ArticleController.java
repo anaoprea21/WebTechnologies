@@ -30,13 +30,18 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/{id}")
-    public Article getArticle(@PathVariable UUID uuid) {
-        return service.getArticle(uuid);
+    @GetMapping("/{pseudo}")
+    public Article getArticle(@PathVariable String pseudo) {
+        return service.getArticle(pseudo);
     }
 
-    @GetMapping("/checkInReview/{id}")
-    public ArticleInReview getArticleInReview(@PathVariable UUID uuid) {
-        return service.checkArticleReviewStatus(uuid);
+    @GetMapping("/checkInReview/{pseudo}")
+    public ArticleInReview getArticleInReview(@PathVariable String pseudo) {
+        return service.checkArticleReviewStatus(pseudo);
+    }
+
+    @GetMapping("/checkInReview")
+    public List<ArticleInReview> getArticleInReview() {
+        return service.getArticlesThatNeedReview();
     }
 }
