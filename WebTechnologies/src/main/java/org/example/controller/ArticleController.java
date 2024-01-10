@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.helper.Article;
+import org.example.helper.ArticleInReview;
 import org.example.helper.User;
 import org.example.service.ArticleService;
 import org.example.service.UserService;
@@ -30,7 +31,12 @@ public class ArticleController {
 
 
     @GetMapping("/{id}")
-    public List<Article> getArticle(@PathVariable UUID uuid) {
-        return service.getAllArticles();
+    public Article getArticle(@PathVariable UUID uuid) {
+        return service.getArticle(uuid);
+    }
+
+    @GetMapping("/checkInReview/{id}")
+    public ArticleInReview getArticleInReview(@PathVariable UUID uuid) {
+        return service.checkArticleReviewStatus(uuid);
     }
 }

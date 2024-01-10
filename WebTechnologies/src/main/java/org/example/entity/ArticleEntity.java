@@ -18,11 +18,15 @@ public class ArticleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "author", nullable = false)
     private UserEntity author;
 
     @ManyToOne
@@ -32,8 +36,12 @@ public class ArticleEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private UserEntity reviewer;
 
+    @Column(nullable = false)
     private ReviewResponses response;
+
+    @Column(nullable = false)
     private boolean isSentToReview;
 
+    @Column(nullable = false)
     private Integer views;
 }

@@ -3,6 +3,7 @@ package org.example.mapper;
 import org.example.entity.ArticleEntity;
 import org.example.entity.UserEntity;
 import org.example.helper.Article;
+import org.example.helper.ArticleInReview;
 import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,5 +58,13 @@ public class ArticleMapper {
         }
 
         return articleEntity;
+    }
+
+    public ArticleInReview toArticleInReview(ArticleEntity articleEntity){
+        ArticleInReview article = new ArticleInReview();
+        article.setUuid(articleEntity.getId());
+        article.setText(articleEntity.getText());
+        article.setTitle(articleEntity.getTitle());
+        return article;
     }
 }

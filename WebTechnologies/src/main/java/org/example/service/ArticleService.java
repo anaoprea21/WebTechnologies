@@ -2,13 +2,18 @@ package org.example.service;
 
 import org.example.entity.ArticleEntity;
 import org.example.helper.Article;
+import org.example.helper.ArticleInReview;
 import org.example.mapper.ArticleMapper;
 import org.example.repository.ArticleRepository;
 import org.example.repository.UserRepository;
+import org.mapstruct.ap.shaded.freemarker.core.ReturnInstruction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ArticleService {
@@ -33,13 +38,23 @@ public class ArticleService {
         return mapper.moreToResponse(repository.findAll());
     }
 
-    //check article status
+    public Article getArticle(UUID uuid) {
+        ArticleEntity optionalArticle = repository.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("NOT_FOUND"));// fa cu exception handler ca in lab10
+        return mapper.toResponse(optionalArticle);
+    }
 
-    //get article
+    public ArticleInReview checkArticleReviewStatus(UUID uuid) {
+        ArticleEntity articleEntity = repository.findById(uuid).orElseThrow(() -> new RuntimeException("NOT_FOUND"));
+        return mapper.toArticleInReview(articleEntity);
+    }
+
+//    public ArticleInReview getArticlesThatNeedReview() {
+//        ArticleEntity articleEntity = repository.findBy(uuid).orElseThrow(() -> new RuntimeException("NOT_FOUND"));
+//        return mapper.toArticleInReview(articleEntity);
+//    }
 
     //get reporter articles
-
-    //get articles that need to be reviewed
 
     //get most popular articles after nr of views
 }
