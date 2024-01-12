@@ -16,8 +16,7 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, UUID> {
     @Query(value = "SELECT * from ARTICLE a where a.isSentToReview = :status"
             , nativeQuery = true)
     List<ArticleEntity> findArticleWithIsSentToReviewTrue(boolean status);
-    @Query(value = "SELECT * from ARTICLE a where a.author = :pseudo"
-            , nativeQuery = true)
+
     Optional<ArticleEntity> findByAuthor(UserEntity pseudo);
 
 }

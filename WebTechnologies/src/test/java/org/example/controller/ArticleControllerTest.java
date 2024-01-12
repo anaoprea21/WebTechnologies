@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,5 +61,32 @@ public class ArticleControllerTest {
                         .content(objectMapper.writeValueAsString(article)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Title"));
+    }
+
+    @Test
+    void getAllArticles()throws Exception {
+        mockMvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(article)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/article"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
+
+    @Test
+    void getArticleTest() throws Exception {
+        String responseString = mockMvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(article)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        Article art = objectMapper.readValue(responseString, Article.class);
+
+        mockMvc.perform(get("/api/article/" + art.getAuthor()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(art.getTitle()));
     }
 }
