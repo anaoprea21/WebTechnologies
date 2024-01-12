@@ -27,8 +27,8 @@ public class ArticleMapper {
         response.setText(article.getText());
         response.setTitle(article.getTitle());
         response.setAuthor(article.getAuthor().getPseudonym());
-        response.setReviewer(article.getReviewer().getPseudonym());
-        response.setStory(article.getStory().getTitle());
+//        response.setReviewer(article.getReviewer().getPseudonym());
+//        response.setStory(article.getStory().getTitle());
         response.setSentToReview(article.isSentToReview());
         return response;
     }
@@ -42,8 +42,8 @@ public class ArticleMapper {
             response.setText(art.getText());
             response.setTitle(art.getTitle());
             response.setAuthor(art.getAuthor().getPseudonym());
-            response.setReviewer(art.getReviewer().getPseudonym());
-            response.setStory(art.getStory().getTitle());
+//            response.setReviewer(art.getReviewer().getPseudonym());
+//            response.setStory(art.getStory().getTitle());
             response.setSentToReview(art.isSentToReview());
             articles.add(response);
         }
@@ -73,7 +73,7 @@ public class ArticleMapper {
         article.setText(articleEntity.getText());
         article.setTitle(articleEntity.getTitle());
         article.setAuthor(articleEntity.getAuthor().getPseudonym());
-        article.setReviewer(articleEntity.getReviewer().getPseudonym());
+//        article.setReviewer(articleEntity.getReviewer().getPseudonym());
         article.setSentToReview(articleEntity.isSentToReview());
         return article;
     }

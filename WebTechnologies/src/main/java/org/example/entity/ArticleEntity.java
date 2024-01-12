@@ -29,12 +29,12 @@ public class ArticleEntity {
     @JoinColumn(name = "author", nullable = false)
     private UserEntity author;
 
-    @ManyToOne
-    @JoinColumn(name = "story_id", nullable = true)
-    private StoryEntity story;
+//    @ManyToOne
+//    @JoinColumn(name = "story_id", nullable = true)
+//    private StoryEntity story;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserEntity reviewer;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private UserEntity reviewer;
 
     private ReviewResponses response;
 

@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.ArticleEntity;
+import org.example.entity.UserEntity;
 import org.example.exception.ArticleNotFound;
 import org.example.exception.UserNotFound;
 import org.example.helper.Article;
@@ -42,20 +43,22 @@ public class ArticleService {
     }
 
     public Article getArticle(String pseudo) {
-        ArticleEntity optionalArticle = repository.findByAuthor(pseudo)
+        UserEntity user = userRepository.findCustomerByPseudonym(pseudo).orElseThrow(() -> new UserNotFound("User not found for pseudonym " + pseudo));
+        ArticleEntity optionalArticle = repository.findByAuthor(user)
                 .orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
         return mapper.toResponse(optionalArticle);
     }
 
     public ArticleInReview checkArticleReviewStatus(String pseudo) {
-        ArticleEntity articleEntity = repository.findByAuthor(pseudo).orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
+        UserEntity user = userRepository.findCustomerByPseudonym(pseudo).orElseThrow(() -> new UserNotFound("User not found for pseudonym " + pseudo));
+        ArticleEntity articleEntity = repository.findByAuthor(user).orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
         return mapper.toArticleInReview(articleEntity);
     }
 
     public List<ArticleInReview> getArticlesThatNeedReview() {
-        List<ArticleEntity> articleEntities= repository.findArticleWithIsSentToReviewTrue(true);
-        List<ArticleInReview> articleInReviews=new ArrayList<>();
-        for(ArticleEntity art:articleEntities){
+        List<ArticleEntity> articleEntities = repository.findArticleWithIsSentToReviewTrue(true);
+        List<ArticleInReview> articleInReviews = new ArrayList<>();
+        for (ArticleEntity art : articleEntities) {
             articleInReviews.add(mapper.toArticleInReview(art));
         }
         return articleInReviews;

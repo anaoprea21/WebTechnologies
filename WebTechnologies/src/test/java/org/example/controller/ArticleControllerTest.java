@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.helper.Article;
 import org.example.helper.User;
@@ -37,21 +38,27 @@ public class ArticleControllerTest {
     private User user;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         user = new User("username", "email@email.com", "password", UserRole.REPORTER, "pseudo");
+
+        mockMvc.perform(post("/api/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isOk());
 
         article = new Article();
         article.setText("text text text text");
         article.setTitle("Title");
         article.setAuthor("pseudo");
+        article.setReviewer("pseudo");
     }
 
-//    @Test
-//    void createCustomerTest() throws Exception {
-//        mockMvc.perform(post("/api/article")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(article)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.title").value("Title"));
-//    }
+    @Test
+    void createArticleTest() throws Exception {
+        mockMvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(article)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Title"));
+    }
 }

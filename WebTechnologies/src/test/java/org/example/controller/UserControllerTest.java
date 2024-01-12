@@ -72,9 +72,6 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userList)))
                 .andExpect(status().isOk());
-
-//        mockMvc.perform(get("/api/user/many"))
-//                .andExpect(jsonPath("$").isArray());
     }
 
 }
