@@ -17,6 +17,6 @@ public class ArticleInReview {
     private String text;
     private String author;
     private ReviewResponses response;
-    private boolean isSentToReview;
+    private boolean reviewing;
     private String reviewer;//pseudonym
 }

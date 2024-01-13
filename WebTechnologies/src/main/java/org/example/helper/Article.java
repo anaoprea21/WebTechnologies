@@ -1,9 +1,6 @@
 package org.example.helper;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import org.example.entity.StoryEntity;
-import org.example.entity.UserEntity;
 
 import java.util.UUID;
 
@@ -16,6 +13,6 @@ public class Article {
     private String story;
     private String reviewer;
     private ReviewResponses response;
-    private boolean isSentToReview;
+    private boolean reviewing;
     private Integer views;
 }

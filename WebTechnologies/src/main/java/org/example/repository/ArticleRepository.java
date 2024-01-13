@@ -4,6 +4,7 @@ import org.example.entity.ArticleEntity;
 import org.example.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,10 +14,14 @@ import java.util.UUID;
 @Repository
 public interface ArticleRepository extends JpaRepository<ArticleEntity, UUID> {
 
-    @Query(value = "SELECT * from ARTICLE a where a.isSentToReview = :status"
+    @Query(value = "select * from ARTICLE a where a.reviewing = :reviewing"
             , nativeQuery = true)
-    List<ArticleEntity> findArticleWithIsSentToReviewTrue(boolean status);
+    List<ArticleEntity> findArticleWithIsSentToReviewTrue(@Param("reviewing") boolean reviewing);
 
-    Optional<ArticleEntity> findByAuthor(UserEntity pseudo);
+    List<ArticleEntity> findByAuthor(UserEntity pseudo);
+    Optional<ArticleEntity> findByTitle(String title);
+
+    List<ArticleEntity> findByOrderByViewsAsc();
+
 
 }

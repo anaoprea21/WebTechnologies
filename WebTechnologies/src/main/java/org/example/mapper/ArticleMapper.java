@@ -28,8 +28,7 @@ public class ArticleMapper {
         response.setTitle(article.getTitle());
         response.setAuthor(article.getAuthor().getPseudonym());
 //        response.setReviewer(article.getReviewer().getPseudonym());
-//        response.setStory(article.getStory().getTitle());
-        response.setSentToReview(article.isSentToReview());
+        response.setReviewing(article.isReviewing());
         return response;
     }
 
@@ -43,8 +42,7 @@ public class ArticleMapper {
             response.setTitle(art.getTitle());
             response.setAuthor(art.getAuthor().getPseudonym());
 //            response.setReviewer(art.getReviewer().getPseudonym());
-//            response.setStory(art.getStory().getTitle());
-            response.setSentToReview(art.isSentToReview());
+            response.setReviewing(art.isReviewing());
             articles.add(response);
         }
         return articles;
@@ -54,6 +52,8 @@ public class ArticleMapper {
         ArticleEntity articleEntity = new ArticleEntity();
 
         articleEntity.setText(article.getText());
+        articleEntity.setTitle(article.getTitle());
+        articleEntity.setReviewing(article.isReviewing());
         articleEntity.setTitle(article.getTitle());
 
         final UserEntity optionalUser = repository.findCustomerByPseudonym(article.getAuthor()).orElseThrow(() -> new UserNotFound("Author not found for this article"));
@@ -74,7 +74,7 @@ public class ArticleMapper {
         article.setTitle(articleEntity.getTitle());
         article.setAuthor(articleEntity.getAuthor().getPseudonym());
 //        article.setReviewer(articleEntity.getReviewer().getPseudonym());
-        article.setSentToReview(articleEntity.isSentToReview());
+        article.setReviewing(articleEntity.isReviewing());
         return article;
     }
 }

@@ -33,26 +33,33 @@ public class ArticleService {
 
     public Article create(final Article article) {
         final ArticleEntity entity = mapper.toEntity(article);
+        entity.setViews(0);
         repository.save(entity);
 
         return mapper.toResponse(entity);
     }
 
     public List<Article> getAllArticles() {
-        return mapper.moreToResponse(repository.findAll());
+        List<Article> articles = mapper.moreToResponse(repository.findAll());
+        for (Article art : articles) {
+            art.setViews(art.getViews() + 1);
+        }
+        return articles;
+
     }
 
-    public Article getArticle(String pseudo) {
-        UserEntity user = userRepository.findCustomerByPseudonym(pseudo).orElseThrow(() -> new UserNotFound("User not found for pseudonym " + pseudo));
-        ArticleEntity optionalArticle = repository.findByAuthor(user)
-                .orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
+    public Article getArticle(String title) {
+        ArticleEntity optionalArticle = repository.findByTitle(title)
+                .orElseThrow(() -> new ArticleNotFound("Article not found for title " + title));
+
+        optionalArticle.setViews(optionalArticle.getViews() + 1);
         return mapper.toResponse(optionalArticle);
     }
 
-    public ArticleInReview checkArticleReviewStatus(String pseudo) {
-        UserEntity user = userRepository.findCustomerByPseudonym(pseudo).orElseThrow(() -> new UserNotFound("User not found for pseudonym " + pseudo));
-        ArticleEntity articleEntity = repository.findByAuthor(user).orElseThrow(() -> new ArticleNotFound("Article not found for author " + pseudo));
-        return mapper.toArticleInReview(articleEntity);
+    public ArticleInReview checkArticleReviewStatus(String title) {
+        ArticleEntity optionalArticle = repository.findByTitle(title)
+                .orElseThrow(() -> new ArticleNotFound("Article not found for title " + title));
+        return mapper.toArticleInReview(optionalArticle);
     }
 
     public List<ArticleInReview> getArticlesThatNeedReview() {
@@ -64,7 +71,25 @@ public class ArticleService {
         return articleInReviews;
     }
 
-    //get reporter articles
+    public List<Article> getReporterArticles(String pseudo) {
+        UserEntity user = userRepository.findCustomerByPseudonym(pseudo).orElseThrow(() -> new UserNotFound("User not found for pseudonym " + pseudo));
 
+        List<ArticleEntity> articlesEntities = repository.findByAuthor(user);
+        List<Article> articles = new ArrayList<>();
+        for (ArticleEntity art : articlesEntities) {
+            art.setViews(art.getViews() + 1);
+            articles.add(mapper.toResponse(art));
+        }
+
+        return articles;
+    }
+
+    public List<Article> getAllArticlesByPopularity() {
+        return mapper.moreToResponse(repository.findByOrderByViewsAsc());
+    }
+
+
+    //add roles and validators
+    //views
     //get most popular articles after nr of views
 }

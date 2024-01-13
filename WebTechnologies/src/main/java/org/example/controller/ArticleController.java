@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/article")
@@ -29,19 +28,28 @@ public class ArticleController {
         return service.getAllArticles();
     }
 
-
-    @GetMapping("/{pseudo}")
-    public Article getArticle(@PathVariable String pseudo) {
-        return service.getArticle(pseudo);
+    @GetMapping("/{title}")
+    public Article getArticle(@PathVariable String title) {
+        return service.getArticle(title);
     }
 
-    @GetMapping("/checkInReview/{pseudo}")
-    public ArticleInReview getArticleInReview(@PathVariable String pseudo) {
-        return service.checkArticleReviewStatus(pseudo);
+    @GetMapping("/author/{pseudo}")
+    public List<Article> getArticlesByAuthor(@PathVariable String pseudo) {
+        return service.getReporterArticles(pseudo);
+    }
+
+    @GetMapping("/checkInReview/{title}")
+    public ArticleInReview getArticleInReview(@PathVariable String title) {
+        return service.checkArticleReviewStatus(title);
     }
 
     @GetMapping("/checkInReview")
     public List<ArticleInReview> getArticleInReview() {
         return service.getArticlesThatNeedReview();
+    }
+
+    @GetMapping("/getArticlesByPopularity")
+    public List<Article> getAllArticlesByPopularity() {
+        return service.getAllArticlesByPopularity();
     }
 }
