@@ -2,9 +2,8 @@ package org.example.controller;
 
 import org.example.helper.Article;
 import org.example.helper.ArticleInReview;
-import org.example.helper.User;
+import org.example.helper.CreateArticleDTO;
 import org.example.service.ArticleService;
-import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +17,13 @@ public class ArticleController {
     private ArticleService service;
 
     @PostMapping()
-    public ResponseEntity<Article> create(@RequestBody final Article article) {
-        final var savedArticle = service.create(article);
-        return ResponseEntity.ok(savedArticle);
+    public ResponseEntity<ArticleInReview> create(@RequestBody final CreateArticleDTO createArticleDTO) {
+        final boolean isUserReporter = service.checkUserReporter(createArticleDTO.getAuthorUsername());
+        if (isUserReporter) {
+            final var savedArticle = service.create(createArticleDTO.getArticle(),createArticleDTO.getAuthorUsername());
+            return ResponseEntity.ok(savedArticle);
+        }
+        return (ResponseEntity<ArticleInReview>) ResponseEntity.status(401);
     }
 
     @GetMapping
@@ -39,13 +42,20 @@ public class ArticleController {
     }
 
     @GetMapping("/checkInReview/{title}")
-    public ArticleInReview getArticleInReview(@PathVariable String title) {
-        return service.checkArticleReviewStatus(title);
+    public ArticleInReview getArticleInReview(@PathVariable String title, @RequestBody String username) {
+        final boolean isUserReporter = service.checkUserReporter(username);
+        if (isUserReporter) {
+            return service.checkArticleReviewStatus(title);
+        }
+        return (ArticleInReview) ResponseEntity.status(401);
     }
 
     @GetMapping("/checkInReview")
-    public List<ArticleInReview> getArticleInReview() {
-        return service.getArticlesThatNeedReview();
+    public List<ArticleInReview> getArticleInReview(@RequestBody String username) {//NO REQUEST BODY
+        final boolean isUserReporter = service.checkUserReporter(username);
+        if (isUserReporter) {
+        return service.getArticlesThatNeedReview();}
+        return (List<ArticleInReview>) ResponseEntity.status(401);
     }
 
     @GetMapping("/getArticlesByPopularity")

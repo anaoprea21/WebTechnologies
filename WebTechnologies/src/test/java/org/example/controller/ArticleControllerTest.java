@@ -2,10 +2,7 @@ package org.example.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.helper.Article;
-import org.example.helper.User;
-import org.example.helper.UserList;
-import org.example.helper.UserRole;
+import org.example.helper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +34,7 @@ public class ArticleControllerTest {
 
     private Article article;
     private User user;
+    private CreateArticleDTO createDTO;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -51,23 +49,25 @@ public class ArticleControllerTest {
         article.setText("text text text text");
         article.setTitle("Title");
         article.setAuthor("pseudo");
-        article.setReviewer("pseudo");
+        article.setReviewing(false);
+
+        createDTO = new CreateArticleDTO(user.getUsername(), article);
     }
 
     @Test
     void createArticleTest() throws Exception {
         mockMvc.perform(post("/api/article")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(article)))
+                        .content(objectMapper.writeValueAsString(createDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Title"));
     }
 
     @Test
-    void getAllArticles()throws Exception {
+    void getAllArticles() throws Exception {
         mockMvc.perform(post("/api/article")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(article)))
+                        .content(objectMapper.writeValueAsString(createDTO)))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/article"))
@@ -79,14 +79,45 @@ public class ArticleControllerTest {
     void getArticleTest() throws Exception {
         String responseString = mockMvc.perform(post("/api/article")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(article)))
+                        .content(objectMapper.writeValueAsString(createDTO)))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         Article art = objectMapper.readValue(responseString, Article.class);
 
-        mockMvc.perform(get("/api/article/" + art.getAuthor()))
+        mockMvc.perform(get("/api/article/" + art.getTitle()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(art.getTitle()));
     }
+
+    @Test
+    void getArticlesByAuthorTest() throws Exception {
+        String responseString = mockMvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDTO)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        Article art = objectMapper.readValue(responseString, Article.class);
+
+        mockMvc.perform(get("/api/article/author/" + art.getAuthor()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
+
+    @Test
+    void getArticlesInReviewTest() throws Exception {
+        String responseString = mockMvc.perform(post("/api/article")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDTO)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        Article art = objectMapper.readValue(responseString, Article.class);
+
+        mockMvc.perform(get("/api/article/checkInReview/" + art.getTitle()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(art.getTitle()));
+    }
+
 }

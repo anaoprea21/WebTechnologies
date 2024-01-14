@@ -3,9 +3,7 @@ package org.example.helper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.entity.ArticleEntity;
 
-import java.sql.SQLException;
 import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +15,6 @@ public class ArticleInReview {
     private String text;
     private String author;
     private ReviewResponses response;
+    private String responseDescription;
     private boolean reviewing;
-    private String reviewer;//pseudonym
 }

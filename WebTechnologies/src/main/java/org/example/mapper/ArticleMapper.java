@@ -2,7 +2,6 @@ package org.example.mapper;
 
 import org.example.entity.ArticleEntity;
 import org.example.entity.UserEntity;
-import org.example.exception.ArticleNotFound;
 import org.example.exception.UserNotFound;
 import org.example.helper.Article;
 import org.example.helper.ArticleInReview;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ArticleMapper {
@@ -26,9 +24,8 @@ public class ArticleMapper {
         response.setUuid(article.getId());
         response.setText(article.getText());
         response.setTitle(article.getTitle());
+        response.setViews(article.getViews());
         response.setAuthor(article.getAuthor().getPseudonym());
-//        response.setReviewer(article.getReviewer().getPseudonym());
-        response.setReviewing(article.isReviewing());
         return response;
     }
 
@@ -40,9 +37,8 @@ public class ArticleMapper {
             response.setUuid(art.getId());
             response.setText(art.getText());
             response.setTitle(art.getTitle());
+            response.setViews(art.getViews());
             response.setAuthor(art.getAuthor().getPseudonym());
-//            response.setReviewer(art.getReviewer().getPseudonym());
-            response.setReviewing(art.isReviewing());
             articles.add(response);
         }
         return articles;
@@ -51,14 +47,14 @@ public class ArticleMapper {
     public ArticleEntity toEntity(Article article) {
         ArticleEntity articleEntity = new ArticleEntity();
 
+        articleEntity.setId(article.getUuid());
         articleEntity.setText(article.getText());
         articleEntity.setTitle(article.getTitle());
-        articleEntity.setReviewing(article.isReviewing());
-        articleEntity.setTitle(article.getTitle());
+        articleEntity.setViews(article.getViews());
 
         final UserEntity optionalUser = repository.findCustomerByPseudonym(article.getAuthor()).orElseThrow(() -> new UserNotFound("Author not found for this article"));
-
         articleEntity.setAuthor(optionalUser);
+
         final var articles = optionalUser.getArticles();
         articles.add(articleEntity);
         optionalUser.setArticles(articles);
@@ -69,12 +65,39 @@ public class ArticleMapper {
 
     public ArticleInReview toArticleInReview(ArticleEntity articleEntity) {
         ArticleInReview article = new ArticleInReview();
-        article.setUuid(articleEntity.getId());
         article.setText(articleEntity.getText());
         article.setTitle(articleEntity.getTitle());
         article.setAuthor(articleEntity.getAuthor().getPseudonym());
-//        article.setReviewer(articleEntity.getReviewer().getPseudonym());
+        if (articleEntity.isReviewing()) {
+            article.setReviewing(articleEntity.isReviewing());
+            article.setResponse(articleEntity.getResponse());
+            article.setResponseDescription(articleEntity.getResponseDescription());
+        }
         article.setReviewing(articleEntity.isReviewing());
         return article;
+    }
+
+    public ArticleEntity articleInReviewToEntity(ArticleInReview article) {
+        ArticleEntity articleEntity = new ArticleEntity();
+
+        articleEntity.setId(article.getUuid());
+        articleEntity.setText(article.getText());
+        articleEntity.setTitle(article.getTitle());
+
+        final UserEntity optionalUser = repository.findCustomerByPseudonym(article.getAuthor()).orElseThrow(() -> new UserNotFound("Author not found for this article"));
+        articleEntity.setAuthor(optionalUser);
+
+        if (article.isReviewing()) {
+            articleEntity.setReviewing(article.isReviewing());
+            articleEntity.setResponse(article.getResponse());
+            articleEntity.setResponseDescription(article.getResponseDescription());
+        }
+
+        final var articles = optionalUser.getArticles();
+        articles.add(articleEntity);
+        optionalUser.setArticles(articles);
+        repository.save(optionalUser);
+
+        return articleEntity;
     }
 }

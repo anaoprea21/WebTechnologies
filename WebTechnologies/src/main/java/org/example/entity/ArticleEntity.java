@@ -29,10 +29,9 @@ public class ArticleEntity {
     @JoinColumn(name = "author", nullable = false)
     private UserEntity author;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserEntity reviewer;
-
     private ReviewResponses response;
+
+    private String responseDescription;
 
     private boolean reviewing;
 
