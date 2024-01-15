@@ -75,6 +75,7 @@ public class ArticleService {
                 .orElseThrow(() -> new ArticleNotFound("Article not found for title " + title));
 
         optionalArticle.setViews(optionalArticle.getViews() + 1);
+        repository.save(optionalArticle);
         return mapper.toResponse(optionalArticle);
     }
 
@@ -99,7 +100,6 @@ public class ArticleService {
         List<ArticleEntity> articlesEntities = repository.findByAuthor(user);
         List<Article> articles = new ArrayList<>();
         for (ArticleEntity art : articlesEntities) {
-            art.setViews(art.getViews() + 1);
             articles.add(mapper.toResponse(art));
         }
 
@@ -107,7 +107,7 @@ public class ArticleService {
     }
 
     public List<Article> getAllArticlesByPopularity() {
-        return mapper.moreToResponse(repository.findByOrderByViewsAsc());
+        return mapper.moreToResponse(repository.findByOrderByViewsDesc());
     }
 
     public boolean checkUserReporter(String authorUsername) {

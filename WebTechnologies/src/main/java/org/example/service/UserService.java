@@ -21,10 +21,10 @@ public class UserService {
     private UserMapper mapper;
 
     public User create(final User user) {
-        final UserEntity entity = mapper.toEntity(user);
+        final UserEntity entity = UserMapper.toEntity(user);
         repository.save(entity);
 
-        return mapper.toResponse(entity);
+        return UserMapper.toResponse(entity);
     }
 
     public List<User> createManyUsers(final UserList users) {

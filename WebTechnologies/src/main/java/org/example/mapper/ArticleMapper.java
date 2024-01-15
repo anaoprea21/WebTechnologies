@@ -5,6 +5,7 @@ import org.example.entity.UserEntity;
 import org.example.exception.UserNotFound;
 import org.example.helper.Article;
 import org.example.helper.ArticleInReview;
+import org.example.repository.ArticleRepository;
 import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class ArticleMapper {
     @Autowired
     UserRepository repository;
 
+    @Autowired
+    ArticleRepository articleRepository;
+
     public Article toResponse(ArticleEntity article) {
         Article response = new Article();
 
@@ -25,6 +29,7 @@ public class ArticleMapper {
         response.setText(article.getText());
         response.setTitle(article.getTitle());
         response.setViews(article.getViews());
+        response.setReviewing(article.isReviewing());
         response.setAuthor(article.getAuthor().getPseudonym());
         return response;
     }
@@ -37,8 +42,12 @@ public class ArticleMapper {
             response.setUuid(art.getId());
             response.setText(art.getText());
             response.setTitle(art.getTitle());
-            response.setViews(art.getViews());
+            response.setReviewing(art.isReviewing());
+            response.setViews(art.getViews() + 1);
             response.setAuthor(art.getAuthor().getPseudonym());
+
+            art.setViews(art.getViews() + 1);
+            articleRepository.save(art);
             articles.add(response);
         }
         return articles;

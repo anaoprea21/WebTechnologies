@@ -21,7 +21,7 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, UUID> {
     List<ArticleEntity> findByAuthor(UserEntity pseudo);
     Optional<ArticleEntity> findByTitle(String title);
 
-    List<ArticleEntity> findByOrderByViewsAsc();
+    List<ArticleEntity> findByOrderByViewsDesc();
 
 
 }
