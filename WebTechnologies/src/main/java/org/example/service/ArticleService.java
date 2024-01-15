@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entity.ArticleEntity;
 import org.example.entity.UserEntity;
 import org.example.exception.ArticleNotFound;
+import org.example.exception.Unauthorized;
 import org.example.exception.UserNotFound;
 import org.example.helper.Article;
 import org.example.helper.ArticleInReview;
@@ -115,7 +116,18 @@ public class ArticleService {
         return user.getRole().equals(UserRole.REPORTER);
     }
 
+    public ArticleInReview update(final Article article, final String username) {
+        UserEntity user = userRepository.findCustomerByUsername(username).orElseThrow(() -> new UserNotFound("User not found for username " + username));
+        if (user.getPseudonym().equals(article.getAuthor())) {
+            final ArticleEntity entity = mapper.toEntity(article);
+            entity.setViews(0);
+            repository.save(entity);
 
-    //add roles and validators
-    //views
+            return mapper.toArticleInReview(entity);
+        } else {
+            throw new Unauthorized("Not the author");
+        }
+
+
+    }
 }

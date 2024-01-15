@@ -2,17 +2,13 @@ package org.example.controller;
 
 import org.example.exception.Unauthorized;
 import org.example.helper.Article;
-import org.example.helper.ArticleInReview;
 import org.example.helper.CreateArticleDTO;
 import org.example.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/article")
@@ -58,7 +54,7 @@ public class ArticleController {
     }
 
     @GetMapping("/checkInReview/author/{username}")
-    public Object getArticleInReviewByAuthor(@PathVariable String username) {//NO REQUEST BODY
+    public Object getArticleInReviewByAuthor(@PathVariable String username) {
 
         final boolean isUserReporter = service.checkUserReporter(username);
         if (isUserReporter) {
@@ -71,5 +67,16 @@ public class ArticleController {
     @GetMapping("/getArticlesByPopularity")
     public List<Article> getAllArticlesByPopularity() {
         return service.getAllArticlesByPopularity();
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<Object> edit(@RequestBody final CreateArticleDTO editArticleDTO) {
+        final boolean isUserReporter = service.checkUserReporter(editArticleDTO.getAuthorUsername());
+        if (isUserReporter) {
+            final var savedArticle = service.update(editArticleDTO.getArticle(), editArticleDTO.getAuthorUsername());
+            return ResponseEntity.ok(savedArticle);
+        } else {
+            throw new Unauthorized("Customer not authorized");
+        }
     }
 }
